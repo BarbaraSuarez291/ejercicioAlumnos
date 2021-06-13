@@ -16,32 +16,49 @@ alumnos = { 1 :  { "nombre": "Lucas", "apellido": "Rodriguez", "edad": '23'}}
 ##cont=2
 
 
+##Funcion que busca si el  numero de matricula ya existe en db.
+def existeAlumno(matricula, alumnos):
+    for mat in alumnos.keys():
+        if mat == matricula:
+            return True
+        else:
+            return False
 
 ## Funcion para mostrar alumno segun su matricula
 ## Verifica que exista un alumno con la matricula que se busca
 def mostrarAlumno(matricula, alumnos):
-    if(alumnos.get(matricula)!= None):
-        nom= alumnos[matricula].get('nombre', 'No hay registro')
-        apell= alumnos[matricula].get('apellido', 'No hay registro')
-        ed= alumnos[matricula].get('edad', 'No hay registro')
-        print('---------------------------')
-        print('Nº de matricula: ', matricula)
-        print('Nombre: ',nom)
-        print('Apellido: ',apell)
-        print('Edad: ',ed)
-        print('---------------------------')
-    else:
-        print('')
-        print('La matricula ingresada no existe.')
-        print('')
+        if(alumnos.get(matricula)!= None):
+            nom= alumnos[matricula].get('nombre', 'No hay registro')
+            apell= alumnos[matricula].get('apellido', 'No hay registro')
+            ed= alumnos[matricula].get('edad', 'No hay registro')
+            print('')
+            print('Nº de matricula: ', matricula)
+            print('Nombre: ',nom)
+            print('Apellido: ',apell)
+            print('Edad: ',ed)
+            print('---------------------------')
+        else:
+            print('')
+            print('La matricula ingresada no existe.')
+            print('')
 ## Funcion para ingresar un alumno nuevo
-def ingresarAlumnoNuevo():
+def ingresarAlumnoNuevo(alumnos):
     matricula = int(input('Nº de matricula: '))
-    nombre = input('Nombre:')
-    apellido = input('Apellido:')
-    edad = input('Edad:')
-    alumnos[matricula]= {"nombre": nombre, "apellido": apellido, "edad": edad}
-    mostrarAlumno(matricula, alumnos)
+    if existeAlumno(matricula, alumnos) == True:
+        print('El numero de matricula ingresado ya existe.')
+        print()
+    else:
+        nombre = input('Nombre:')
+        apellido = input('Apellido:')
+        edad = input('Edad:')
+        alumnos[matricula]= {"nombre": nombre, "apellido": apellido, "edad": edad}
+        print('___________________________')
+        print('Datos de alumno ingresado:')
+        mostrarAlumno(matricula, alumnos)
+
+def listarAlumnos(alumnos):
+    for matricula in alumnos.keys():
+        mostrarAlumno(matricula, alumnos)
 
 ##Con el while el usuario puede elegit opciones y asi, decidir cuando finalizar el programa.
 i=0
@@ -50,11 +67,12 @@ while(i==0):
     print("  Seleccione la opcion deseada:")
     print(" -1 para ingresar un nuevo alumno")
     print(" -2 para buscar a un alumno alumno")
-    print(" -3 para finalizar el programa")
+    print(" -3 para mostrar la lista de alumnos")
+    print(" -4 para finalizar el programa")
     opcionElegida=input()
 
     if(opcionElegida=='1'):   ## Ingreso de alumno nuevo
-        ingresarAlumnoNuevo()
+        ingresarAlumnoNuevo(alumnos)
         #print(alumnos)
         #cont+=1
 
@@ -63,7 +81,10 @@ while(i==0):
         matricula=input('Ingrese el numero de matricula: ')
         mostrarAlumno(int(matricula), alumnos)
 
-    elif(opcionElegida=='3'):## Finaliza el programa
+    elif(opcionElegida=='3'):    ## Imprime por pantalla a los alumnos
+        listarAlumnos(alumnos)
+
+    elif(opcionElegida=='4'):## Finaliza el programa
         print('')
         print("Programa Finalizado.")
         print('')
